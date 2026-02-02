@@ -86,7 +86,7 @@
                 <!-- Кнопка контактов -->
                 <div>
                     <a href="https://t.me/kutya_omuraliev" target="_blank" class="bg-primary hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                        <i class="fab fa-telegram-plane mr-2"></i>Связаться
+                        <i class="fab fa-telegram-plane mr-2"></i> Telegram
                     </a>
                 </div>
             </div>
@@ -94,7 +94,7 @@
     </nav>
 
     <!-- Header / Hero Section -->
-    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white" id="about">
         <div class="absolute inset-0">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-slate-100 opacity-70"></div>
             <!-- Декоративные круги -->
@@ -105,9 +105,9 @@
         <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-section">
             <div class="mb-8 relative inline-block group">
                 <div class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
-                <!-- ФОТОГРАФИЯ С ГУГЛ ДИСКА -->
+                <!-- ФОТОГРАФИЯ ИЗ РЕПОЗИТОРИЯ -->
                 <img class="relative w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-white shadow-2xl mx-auto transform transition duration-500 hover:scale-105" 
-                     src="https://drive.usercontent.google.com/uc?id=1Nr8XNJ7HGtPm7-knbW6hPw1etd2hRISl&export=download" 
+                     src="MyImage.jpeg" 
                      alt="Омуралиев Кутман"
                      onerror="this.src='https://ui-avatars.com/api/?name=Kutman+Omuraliev&background=0D8ABC&color=fff&size=200'">
             </div>
@@ -123,15 +123,24 @@
             </p>
             
             <div class="flex flex-wrap justify-center gap-4">
-                <a href="mailto:kutmanomuraliev012@gmail.com" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent hover:bg-blue-600 transition-all shadow-md hover:shadow-lg">
-                    <i class="fas fa-envelope mr-2"></i> Email
+                <!-- WhatsApp Button -->
+                <a href="https://wa.me/996500888268?text=Здравствуйте%20Кутман,%20по%20вашему%20резюме%20из%20GitHub.io" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#25D366] hover:bg-green-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <i class="fab fa-whatsapp mr-2 text-xl"></i> WhatsApp
                 </a>
+                
+                <!-- Phone Button -->
                 <a href="tel:+996500888268" class="inline-flex items-center px-6 py-3 border border-slate-300 text-base font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-sm hover:shadow-md">
-                    <i class="fas fa-phone mr-2"></i> +996 (500) 888 268
+                    <i class="fas fa-phone-alt mr-2 text-accent"></i> Позвонить
                 </a>
-                <div class="text-slate-500 flex items-center px-4 py-2">
-                    <i class="fas fa-map-marker-alt mr-2"></i> Бишкек, Кыргызстан
-                </div>
+
+                <!-- Instagram Button -->
+                <a href="https://www.instagram.com/_omuraliev_kutman_/" target="_blank" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                    <i class="fab fa-instagram mr-2 text-xl"></i> Instagram
+                </a>
+            </div>
+            
+            <div class="mt-6 text-slate-500 flex justify-center items-center">
+                <i class="fas fa-map-marker-alt mr-2"></i> Бишкек, Кыргызстан
             </div>
         </div>
     </header>
@@ -356,9 +365,19 @@
                 <p class="text-slate-500 text-sm">© 2026 Омуралиев Кутман. Все права защищены.</p>
             </div>
             <div class="flex space-x-6">
-                <a href="https://t.me/kutya_omuraliev" class="text-slate-400 hover:text-accent transition-colors text-xl">
+                <!-- Telegram -->
+                <a href="https://t.me/kutya_omuraliev" target="_blank" class="text-slate-400 hover:text-accent transition-colors text-xl">
                     <i class="fab fa-telegram"></i>
                 </a>
+                <!-- WhatsApp -->
+                <a href="https://wa.me/996500888268?text=Здравствуйте%20Кутман,%20по%20вашему%20резюме%20из%20GitHub.io" target="_blank" class="text-slate-400 hover:text-green-500 transition-colors text-xl">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/_omuraliev_kutman_/" target="_blank" class="text-slate-400 hover:text-pink-600 transition-colors text-xl">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <!-- Email -->
                 <a href="mailto:kutmanomuraliev012@gmail.com" class="text-slate-400 hover:text-accent transition-colors text-xl">
                     <i class="fas fa-envelope"></i>
                 </a>
