@@ -155,6 +155,13 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         
+        /* Mobile Active Nav State */
+        .active-mobile-nav {
+            background-color: var(--color-accent) !important;
+            color: white !important;
+            border-color: var(--color-accent) !important;
+        }
+        
         /* Contact Dropdown Logic */
         .contact-dropdown {
             transform-origin: top right;
@@ -313,13 +320,13 @@
                 <!-- Mobile Nav Slider -->
                 <div class="md:hidden w-full overflow-x-auto mobile-nav-slider pb-2 mt-2">
                     <div class="flex items-center gap-4 px-1 min-w-max">
-                        <a href="#about" onclick="window.scrollTo(0,0); return false;" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface">Обо мне</a>
+                        <a href="#about" onclick="window.scrollTo(0,0); return false;" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface transition-colors">Обо мне</a>
                         <div class="w-4 h-px bg-gray-500"></div>
-                        <a href="#experience" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface">Опыт</a>
+                        <a href="#experience" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface transition-colors">Опыт</a>
                         <div class="w-4 h-px bg-gray-500"></div>
-                        <a href="#skills" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface">Навыки</a>
+                        <a href="#skills" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface transition-colors">Навыки</a>
                         <div class="w-4 h-px bg-gray-500"></div>
-                        <a href="#education" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface">Образование</a>
+                        <a href="#education" class="nav-link-mobile px-3 py-1 rounded-md border border-gray-600 text-xs font-bold text-secondary bg-surface transition-colors">Образование</a>
                     </div>
                 </div>
             </div>
@@ -329,7 +336,7 @@
     <main class="pt-32 pb-20 overflow-hidden relative">
 
         <svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-[-1] opacity-20 hidden md:block" xmlns="http://www.w3.org/2000/svg">
-            <path d="M 50% 100 V 3000" class="bpmn-path" />
+            <line x1="50%" y1="100" x2="50%" y2="3000" class="bpmn-path" />
         </svg>
 
         <!-- HERO -->
@@ -337,11 +344,16 @@
             <div class="flex flex-col md:flex-row items-center gap-10">
                 <div class="relative group cursor-pointer w-full md:w-5/12 flex justify-center" onclick="openModal('MyImage.jpeg')">
                     <div class="w-64 h-64 md:w-80 md:h-80 rounded-full border-2 border-accent p-1 relative animate-float bg-surface">
-                         <div class="w-full h-full rounded-full border border-dashed border-secondary p-2 overflow-hidden">
-                             <img class="w-full h-full rounded-full object-cover transform transition-transform duration-700 group-hover:scale-110" 
-                                  src="MyImage.jpeg" 
+                         <div class="w-full h-full rounded-full border border-dashed border-secondary p-2 overflow-hidden relative">
+                             <!-- Improved Image Handling with Fallback -->
+                             <img src="MyImage.jpeg" 
+                                  class="w-full h-full rounded-full object-cover transform transition-transform duration-700 group-hover:scale-110" 
                                   alt="Омуралиев Кутман"
-                                  onerror="this.src='https://ui-avatars.com/api/?name=Kutman+Omuraliev&background=0f172a&color=fff&size=400'">
+                                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                             <!-- Fallback Icon if image fails -->
+                             <div class="hidden w-full h-full flex items-center justify-center bg-surface absolute inset-0 rounded-full">
+                                 <i class="fas fa-user-astronaut text-6xl text-secondary"></i>
+                             </div>
                          </div>
                          <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-surface/90 backdrop-blur border border-gray-500 px-4 py-1.5 rounded-full shadow-lg flex items-center gap-2 whitespace-nowrap">
                             <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
@@ -683,7 +695,12 @@
                         </div>
 
                         <div class="flex-shrink-0 w-14 h-14 rounded-full bg-surface border-4 border-gray-600 shadow-md flex items-center justify-center relative cursor-pointer hover:scale-110 transition-transform z-20" onclick="openModal('${job.img}')">
-                            <img src="${job.img}" class="w-full h-full rounded-full object-cover" onerror="this.onerror=null; this.parentNode.innerHTML='<i class=&quot;fas ${job.icon} text-secondary&quot;></i>'">
+                            <div class="w-full h-full rounded-full overflow-hidden relative bg-white">
+                                <img src="${job.img}" class="w-full h-full object-cover" alt="${job.company}" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
+                                <div class="hidden absolute inset-0 flex items-center justify-center bg-white text-secondary">
+                                    <i class="fas ${job.icon} text-2xl"></i>
+                                </div>
+                            </div>
                             <div class="absolute top-1/2 -left-4 w-4 h-0.5 bg-gray-600"></div>
                             <div class="absolute top-1/2 -right-4 w-4 h-0.5 bg-gray-600"></div>
                         </div>
@@ -759,7 +776,7 @@
                         entry.target.classList.add('visible');
                     }
                 });
-            }, { threshold: 0.1 });
+            }, { threshold: 0.1 }); // Reduced threshold for mobile
 
             document.querySelectorAll('.reveal-text').forEach(el => observer.observe(el));
 
@@ -784,8 +801,8 @@
                 });
                 
                 mobileLinks.forEach(link => {
-                    link.classList.remove('bg-gray-700', 'text-accent');
-                    if (link.getAttribute('href') === current) link.classList.add('bg-gray-700', 'text-accent');
+                    link.classList.remove('active-mobile-nav');
+                    if (link.getAttribute('href') === current) link.classList.add('active-mobile-nav');
                 });
             });
 
@@ -823,7 +840,7 @@
                     createChart('chartExcel', '#16a34a', 100);
                     chartObserver.disconnect();
                 }
-            }, { threshold: 0.5 });
+            }, { threshold: 0.1 }); // Reduced threshold for mobile
             
             const skillsSection = document.getElementById('skills');
             if(skillsSection) chartObserver.observe(skillsSection);
