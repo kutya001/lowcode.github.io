@@ -1,553 +1,394 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>AppBuilder v12.0 Mobile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Резюме - Омуралиев Кутман</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root {
-            --primary: #2563eb; --primary-dark: #1d4ed8;
-            --bg: #f8fafc; --surface: #ffffff;
-            --text-main: #0f172a; --text-sub: #64748b;
-            --border: #e2e8f0; --success: #10b981; --danger: #ef4444;
-            --nav-height: 60px;
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text-main); font-size: 14px; height: 100vh; display: flex; overflow: hidden; }
-
-        /* --- DESKTOP LAYOUT (Default) --- */
-        .sidebar { width: 260px; background: #1e293b; color: #94a3b8; display: flex; flex-direction: column; border-right: 1px solid #0f172a; flex-shrink: 0; }
-        .logo { padding: 20px; font-size: 1.2rem; font-weight: 700; color: white; border-bottom: 1px solid #334155; }
-        .nav-item { padding: 12px 20px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 3px solid transparent; font-weight: 500; }
-        .nav-item:hover { background: #334155; color: white; }
-        .nav-item.active { background: #0f172a; color: white; border-left-color: var(--primary); }
-        
-        .main { flex: 1; display: flex; flex-direction: column; height: 100%; position: relative; }
-        .header { background: var(--surface); height: 60px; padding: 0 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
-        .content { flex: 1; overflow-y: auto; padding: 20px; position: relative; }
-
-        /* DESKTOP TABLE */
-        .desktop-table-wrap { background: white; border: 1px solid var(--border); border-radius: 8px; overflow: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { position: sticky; top: 0; background: #f1f5f9; text-align: left; padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.75rem; color: var(--text-sub); text-transform: uppercase; z-index: 5; font-weight: 700; }
-        td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        tr:hover td { background: #f8fafc; }
-        
-        /* --- MOBILE LAYOUT (Responsive) --- */
-        .bottom-nav { display: none; } /* Hidden on Desktop */
-        .mobile-card { display: none; }
-        .fab { display: none; }
-
-        @media (max-width: 768px) {
-            /* Hide Desktop Elements */
-            .sidebar { display: none; }
-            .desktop-table-wrap { display: none; }
-            #header-actions { display: none; } /* Use FAB instead */
-            
-            /* Adjust Main Layout */
-            .main { padding-bottom: calc(var(--nav-height) + 10px); } /* Space for bottom nav */
-            .content { padding: 10px; background: #f1f5f9; }
-            .header { padding: 0 15px; height: 50px; }
-            .header h2 { font-size: 1.1rem; }
-
-            /* Mobile Card View */
-            .mobile-list { display: flex; flex-direction: column; gap: 10px; padding-bottom: 80px; }
-            .mobile-card { display: flex; flex-direction: column; background: white; border-radius: 12px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); position: relative; }
-            .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-            .card-title { font-weight: 700; font-size: 1rem; color: var(--text-main); }
-            .card-id { font-size: 0.7rem; color: #94a3b8; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
-            .card-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 0.9rem; }
-            .card-label { color: var(--text-sub); font-size: 0.8rem; }
-            .card-val { font-weight: 500; text-align: right; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-            .card-actions { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; justify-content: flex-end; gap: 15px; }
-            .card-action-btn { color: var(--primary); font-weight: 600; font-size: 0.9rem; background: none; border: none; padding: 5px; }
-            .card-action-btn.danger { color: var(--danger); }
-
-            /* Bottom Navigation */
-            .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: var(--nav-height); background: white; border-top: 1px solid var(--border); display: flex; justify-content: space-around; align-items: center; z-index: 100; box-shadow: 0 -2px 10px rgba(0,0,0,0.03); }
-            .nav-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94a3b8; background: none; border: none; font-size: 0.7rem; font-weight: 600; width: 100%; padding: 8px 0; }
-            .nav-btn.active { color: var(--primary); }
-            .nav-icon { font-size: 1.4rem; line-height: 1; }
-
-            /* Floating Action Button (FAB) */
-            .fab { display: flex; position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; background: var(--primary); color: white; border-radius: 50%; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 4px 12px rgba(37,99,235,0.4); z-index: 90; cursor: pointer; transition: transform 0.2s; }
-            .fab:active { transform: scale(0.95); }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
         }
 
-        /* COMMON UI */
-        .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: white; cursor: pointer; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; }
-        .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
-        .tag { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-        .tag-blue { background: #dbeafe; color: #1e40af; }
+        /* Анимация появления */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, visibility;
+        }
         
-        /* INPUTS (Desktop Inline) */
-        .inline-inp { width: 100%; padding: 6px; border: 1px solid var(--primary); border-radius: 4px; box-sizing: border-box; background: #eff6ff; }
-        
-        /* MODAL (For Mobile & Meta) */
-        .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(2px); }
-        .modal-wrap.open { display: flex; }
-        .modal-box { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 500px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        .modal-body { overflow-y: auto; margin: 15px 0; }
-        .form-group { margin-bottom: 15px; }
-        .form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 5px; color: var(--text-sub); }
-        .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
-        .form-control:focus { border-color: var(--primary); outline: none; }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: none;
+        }
 
-        .loader { position: fixed; top:0; left:0; width:100%; height:3px; background: transparent; z-index: 999; }
-        .loader.active { background: linear-gradient(90deg, var(--primary), var(--success)); animation: load 1s infinite; }
-        @keyframes load { 0% {width:0} 100% {width:100%} }
-        
-        .hidden { display: none !important; }
+        /* Стили для скроллбара */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
     </style>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a', // Slate 900
+                        accent: '#3b82f6', // Blue 500
+                        secondary: '#64748b', // Slate 500
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="text-slate-800 antialiased">
 
-<div class="sidebar">
-    <div class="logo">AppBuilder v12</div>
-    <div id="nav-tables" style="flex:1; overflow-y:auto; padding-top:10px;"></div>
-    <div style="border-top:1px solid #334155">
-        <div class="nav-item" onclick="App.route('settings')">⚙️ <span class="lbl-set">Settings</span></div>
-        <div class="nav-item" onclick="App.route('metadata')">🔧 <span class="lbl-str">Structure</span></div>
-    </div>
-</div>
-
-<div class="main">
-    <div class="loader" id="loader"></div>
-    
-    <div class="header">
-        <h2 id="page-title">App</h2>
-        <div id="header-actions">
+    <!-- Навигация (Мобильная/Десктоп) -->
+    <nav class="fixed w-full z-50 glass-card border-b border-slate-200 shadow-sm transition-all duration-300">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center">
+                    <span class="font-bold text-xl text-primary tracking-tight">K. Omuraliev</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-slate-600 hover:text-accent transition-colors font-medium">Обо мне</a>
+                    <a href="#experience" class="text-slate-600 hover:text-accent transition-colors font-medium">Опыт</a>
+                    <a href="#skills" class="text-slate-600 hover:text-accent transition-colors font-medium">Навыки</a>
+                    <a href="#education" class="text-slate-600 hover:text-accent transition-colors font-medium">Образование</a>
+                </div>
+                <!-- Кнопка контактов -->
+                <div>
+                    <a href="https://t.me/kutya_omuraliev" target="_blank" class="bg-primary hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <i class="fab fa-telegram-plane mr-2"></i>Связаться
+                    </a>
+                </div>
             </div>
-    </div>
-
-    <div class="content" id="app-content"></div>
-
-    <div class="fab" id="fab-add" onclick="Views.table.startAddMobile()">+</div>
-</div>
-
-<div class="bottom-nav">
-    <button class="nav-btn active" onclick="App.route('home')">
-        <span class="nav-icon">🏠</span>
-        <span class="lbl-home">Home</span>
-    </button>
-    <button class="nav-btn" onclick="App.route('metadata')">
-        <span class="nav-icon">🔧</span>
-        <span class="lbl-str">Struct</span>
-    </button>
-    <button class="nav-btn" onclick="App.route('settings')">
-        <span class="nav-icon">⚙️</span>
-        <span class="lbl-set">Set</span>
-    </button>
-</div>
-
-<div class="modal-wrap" id="modal">
-    <div class="modal-box">
-        <h3 id="modal-title" style="margin:0; font-size:1.2rem">Title</h3>
-        <div id="modal-body" class="modal-body"></div>
-        <div style="display:flex; justify-content:flex-end; gap:10px">
-            <button class="btn" onclick="UI.Modal.close()">Cancel</button>
-            <button class="btn btn-primary" id="modal-save">Save</button>
         </div>
-    </div>
-</div>
+    </nav>
 
-<script>
-/* --- CONFIG & LOCALIZATION --- */
-const Lang = {
-    ru: { 
-        NEW: 'Добавить', SAVE: 'Сохранить', SETTINGS: 'Настройки', STRUCTURE: 'Структура', 
-        TABLES: 'Таблицы', HOME: 'Главная', EDIT: 'Изменить', DELETE: 'Удалить', 
-        CONFIRM: 'Удалить запись?', NO_DATA: 'Нет данных'
-    },
-    en: { 
-        NEW: 'Add New', SAVE: 'Save', SETTINGS: 'Settings', STRUCTURE: 'Structure', 
-        TABLES: 'Tables', HOME: 'Home', EDIT: 'Edit', DELETE: 'Delete', 
-        CONFIRM: 'Delete row?', NO_DATA: 'No Data'
-    }
-};
+    <!-- Header / Hero Section -->
+    <header class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-white">
+        <div class="absolute inset-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-slate-100 opacity-70"></div>
+            <!-- Декоративные круги -->
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-blue-100 opacity-50 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-slate-200 opacity-50 blur-3xl"></div>
+        </div>
 
-const API_URL = localStorage.getItem('cfs_url');
-const CURRENT_LANG = localStorage.getItem('cfs_lang') || 'ru';
-const T = (k) => Lang[CURRENT_LANG][k] || k;
-const IS_MOBILE = window.innerWidth <= 768;
-
-/* --- STATE --- */
-const State = {
-    db: { _Metadata: { data: [] } },
-    activeTable: null,
-    editingId: null,
-    
-    async refresh() {
-        UI.Loader(true);
-        if(!API_URL) return UI.Loader(false);
-        try {
-            const res = await fetch(`${API_URL}?action=get_all`);
-            const json = await res.json();
-            if(json.status === 'success') {
-                this.db = json.db;
-                if(!this.db._Metadata) this.db._Metadata = { data: [] };
-                UI.renderNav();
-            }
-        } catch(e) { console.error(e); }
-        UI.Loader(false);
-    }
-};
-
-/* --- UI --- */
-const UI = {
-    Loader(show) { document.getElementById('loader').className = show ? 'loader active' : 'loader'; },
-    
-    translate() {
-        document.querySelectorAll('.lbl-set').forEach(el=>el.innerText=T('SETTINGS'));
-        document.querySelectorAll('.lbl-str').forEach(el=>el.innerText=T('STRUCTURE'));
-        document.querySelectorAll('.lbl-home').forEach(el=>el.innerText=T('HOME'));
-    },
-
-    renderNav() {
-        // Desktop Sidebar
-        const c = document.getElementById('nav-tables');
-        c.innerHTML = `<div style="padding:0 20px;font-size:0.7rem;color:#64748b;font-weight:bold;margin-bottom:5px;text-transform:uppercase">${T('TABLES')}</div>`;
-        const tables = Object.keys(State.db).filter(t => !t.startsWith('_'));
-        
-        tables.forEach(t => {
-            const d = document.createElement('div');
-            d.className = 'nav-item';
-            d.innerHTML = `📄 ${t}`;
-            d.onclick = () => App.route('table', t);
-            c.appendChild(d);
-        });
-
-        // Mobile Home Screen (Table List)
-        if(IS_MOBILE && State.activeTable === null) {
-            const content = document.getElementById('app-content');
-            let html = `<div class="mobile-list">`;
-            tables.forEach(t => {
-                html += `
-                <div class="mobile-card" onclick="App.route('table', '${t}')" style="flex-direction:row; align-items:center; justify-content:space-between">
-                    <span class="card-title">📄 ${t}</span>
-                    <span style="color:#cbd5e1">➤</span>
-                </div>`;
-            });
-            html += `</div>`;
-            content.innerHTML = html;
-            document.getElementById('page-title').innerText = T('HOME');
-            document.getElementById('fab-add').style.display = 'none';
-        }
-    },
-
-    Modal: {
-        open(title, renderFn, onSave) {
-            document.getElementById('modal-title').innerText = title;
-            const body = document.getElementById('modal-body');
-            body.innerHTML = '';
-            renderFn(body);
-            document.getElementById('modal-save').onclick = async () => { await onSave(); UI.Modal.close(); };
-            document.getElementById('modal').classList.add('open');
-        },
-        close() { document.getElementById('modal').classList.remove('open'); }
-    },
-
-    // Universal Form Renderer
-    Form: {
-        render(cont, table, row={}) {
-            if(row.id) cont.innerHTML += `<input type="hidden" id="f_id" value="${row.id}">`;
+        <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-in-section">
+            <div class="mb-8 relative inline-block group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-pulse"></div>
+                <!-- ФОТОГРАФИЯ С ГУГЛ ДИСКА -->
+                <img class="relative w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-white shadow-2xl mx-auto transform transition duration-500 hover:scale-105" 
+                     src="https://drive.usercontent.google.com/uc?id=1Nr8XNJ7HGtPm7-knbW6hPw1etd2hRISl&export=download" 
+                     alt="Омуралиев Кутман"
+                     onerror="this.src='https://ui-avatars.com/api/?name=Kutman+Omuraliev&background=0D8ABC&color=fff&size=200'">
+            </div>
             
-            let meta = State.db._Metadata.data.filter(m => m.table_name === table);
-            if(!meta.length && State.db[table]) {
-                State.db[table].headers.forEach(h => meta.push({field_name: h, data_type: h==='id'?'PK':'TEXT', is_shown: true}));
-            }
+            <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                Омуралиев Кутман
+            </h1>
+            <p class="text-xl md:text-2xl text-accent font-medium mb-6">
+                Data Analyst | BI Analyst | Power BI Specialist
+            </p>
+            <p class="max-w-2xl mx-auto text-lg text-slate-600 leading-relaxed mb-8">
+                Превращаю данные в понятные бизнес-решения. Специализируюсь на аналитике, автоматизации процессов и визуализации данных. Опыт работы более 2.5 лет в BI-аналитике.
+            </p>
+            
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="mailto:kutmanomuraliev012@gmail.com" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-accent hover:bg-blue-600 transition-all shadow-md hover:shadow-lg">
+                    <i class="fas fa-envelope mr-2"></i> Email
+                </a>
+                <a href="tel:+996500888268" class="inline-flex items-center px-6 py-3 border border-slate-300 text-base font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50 transition-all shadow-sm hover:shadow-md">
+                    <i class="fas fa-phone mr-2"></i> +996 (500) 888 268
+                </a>
+                <div class="text-slate-500 flex items-center px-4 py-2">
+                    <i class="fas fa-map-marker-alt mr-2"></i> Бишкек, Кыргызстан
+                </div>
+            </div>
+        </div>
+    </header>
 
-            meta.forEach(m => {
-                if(m.is_shown === false || (m.data_type === 'PK' && !row.id)) return;
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-24">
 
-                const grp = document.createElement('div');
-                grp.className = 'form-group';
-                grp.innerHTML = `<label class="form-label">${m.field_name}</label>`;
+        <!-- Секция Опыт работы -->
+        <section id="experience" class="fade-in-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">Опыт работы</h2>
+                <div class="w-16 h-1 bg-accent mx-auto mt-4 rounded-full"></div>
+                <p class="mt-4 text-slate-500">Более 6 лет общего стажа, из них 2.5+ года в Data/BI аналитике</p>
+            </div>
+
+            <div class="relative border-l-2 border-slate-200 ml-4 md:ml-8 space-y-12">
                 
-                let input;
-                const val = row[m.field_name] || '';
-
-                if(m.data_type === 'FK') {
-                    input = document.createElement('select');
-                    input.className = 'form-control';
-                    input.id = `inp_${m.field_name}`;
-                    input.innerHTML = '<option value="">-</option>';
-                    if(m.ref_table && State.db[m.ref_table]) {
-                        State.db[m.ref_table].data.forEach(r => {
-                            const tm = State.db._Metadata.data.filter(x=>x.table_name===m.ref_table);
-                            const lbl = r[tm.find(x=>x.is_label)?.field_name||'name'] || r.id;
-                            const sel = String(r.id)===String(val)?'selected':'';
-                            input.innerHTML += `<option value="${r.id}" ${sel}>${lbl}</option>`;
-                        });
-                    }
-                } else if (m.data_type === 'DATE') {
-                    input = document.createElement('input'); input.type='date'; input.className='form-control';
-                    input.id = `inp_${m.field_name}`;
-                    if(val) input.value = new Date(val).toISOString().split('T')[0];
-                } else {
-                    input = document.createElement('input'); input.className='form-control';
-                    input.id = `inp_${m.field_name}`;
-                    input.value = val;
-                    if(m.data_type === 'PK') input.disabled = true;
-                }
-                grp.appendChild(input);
-                cont.appendChild(grp);
-            });
-        },
-        collect(table) {
-            const d = {};
-            if(document.getElementById('f_id')) { d.id = document.getElementById('f_id').value; d.is_edit=true; }
-            const meta = State.db._Metadata.data.filter(m => m.table_name === table);
-            // Fallback headers if meta missing
-            const headers = State.db[table]?.headers || [];
-            
-            const fieldsToCheck = meta.length ? meta.map(m=>m.field_name) : headers;
-
-            fieldsToCheck.forEach(f => {
-                const el = document.getElementById('inp_'+f);
-                if(el) d[f] = el.value;
-            });
-            return d;
-        }
-    }
-};
-
-/* --- VIEWS --- */
-const Views = {
-    table: {
-        render(name) {
-            State.activeTable = name;
-            document.getElementById('page-title').innerText = name;
-            
-            const cont = document.getElementById('app-content');
-            const data = State.db[name].data || [];
-            
-            // Get Meta
-            let meta = State.db._Metadata.data.filter(m => m.table_name === name);
-            if(!meta.length && State.db[name]) {
-                State.db[name].headers.forEach(h => meta.push({field_name: h, data_type: h==='id'?'PK':'TEXT', is_shown: true}));
-            }
-            const visibleCols = meta.filter(m => m.is_shown !== false);
-
-            // --- MOBILE VIEW (CARDS) ---
-            if(IS_MOBILE) {
-                document.getElementById('fab-add').style.display = 'flex';
-                let html = `<div class="mobile-list">`;
-                
-                if(!data.length) html += `<div style="text-align:center; padding:40px; color:#94a3b8">${T('NO_DATA')}</div>`;
-                
-                data.forEach(row => {
-                    // Identify Title Field (Label or 2nd column)
-                    const titleField = meta.find(m => m.is_label)?.field_name || visibleCols[1]?.field_name || 'id';
-                    const titleVal = row[titleField] || 'Item';
-                    
-                    html += `<div class="mobile-card">
-                        <div class="card-header">
-                            <span class="card-title">${titleVal}</span>
-                            <span class="card-id">#${row.id}</span>
-                        </div>`;
-                    
-                    // Render first 4 fields
-                    visibleCols.slice(0, 5).forEach(m => {
-                        if(m.field_name === titleField || m.field_name === 'id') return;
-                        let val = row[m.field_name];
-                        if(m.data_type === 'FK' && m.ref_table) {
-                            const tr = State.db[m.ref_table]?.data.find(r=>String(r.id)===String(val));
-                            if(tr) {
-                                const tm = State.db._Metadata.data.filter(x=>x.table_name===m.ref_table);
-                                val = tr[tm.find(x=>x.is_label)?.field_name||'name'] || val;
-                            }
-                        }
-                        html += `<div class="card-row"><span class="card-label">${m.field_name}</span><span class="card-val">${val||'-'}</span></div>`;
-                    });
-
-                    html += `
-                        <div class="card-actions">
-                            <button class="card-action-btn" onclick='Views.table.editModal("${name}", ${JSON.stringify(row)})'>${T('EDIT')}</button>
-                            <button class="card-action-btn danger" onclick='Views.table.del("${name}", "${row.id}")'>${T('DELETE')}</button>
+                <!-- Работа 1 (Текущая) -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-accent border-4 border-white shadow-md group-hover:scale-125 transition-transform duration-300"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">Бизнес Аналитик (IT отдел)</h3>
+                                <p class="text-accent font-medium">Кумтор Голд Компани</p>
+                            </div>
+                            <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">
+                                Октябрь 2025 — Наст. время
+                            </span>
                         </div>
-                    </div>`;
-                });
-                html += `</div>`;
-                cont.innerHTML = html;
+                        <p class="text-slate-600 mb-4">
+                            Взаимодействие с программистами, сбор требований, анализ бизнес-процессов в горнорудной компании.
+                        </p>
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li>Автоматизация отчетности и аналитика данных.</li>
+                            <li>Работа в команде IT отдела.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Работа 2 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-400 border-4 border-white shadow-md group-hover:bg-accent transition-colors duration-300"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">Ментор по Аналитике данных</h3>
+                                <p class="text-secondary font-medium">Образовательные проекты / Частная практика</p>
+                            </div>
+                            <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">
+                                Параллельная занятость
+                            </span>
+                        </div>
+                        <p class="text-slate-600">
+                            Преподавание курсов по Excel, Power BI и основам анализа данных. Обучение студентов работе с базами данных и визуализации.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Работа 3 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-400 border-4 border-white shadow-md group-hover:bg-accent transition-colors duration-300"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">BI Аналитик / Аналитик данных</h3>
+                                <p class="text-secondary font-medium">Различные проекты</p>
+                            </div>
+                            <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">
+                                2023 — 2025
+                            </span>
+                        </div>
+                        <p class="text-slate-600">
+                            Разработка дашбордов в Power BI, анализ больших массивов данных, построение финансовых моделей.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Работа 4 -->
+                <div class="relative pl-8 md:pl-12 group">
+                    <div class="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-slate-400 border-4 border-white shadow-md group-hover:bg-accent transition-colors duration-300"></div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-slate-800">Бухгалтер</h3>
+                                <p class="text-secondary font-medium">Коммерческие организации</p>
+                            </div>
+                            <span class="text-sm text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">
+                                2020 — 2022
+                            </span>
+                        </div>
+                        <p class="text-slate-600">
+                            Ведение бухгалтерского и управленческого учета, работа в 1С. Этот опыт заложил фундамент для понимания финансовых данных.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Секция Навыки -->
+        <section id="skills" class="fade-in-section">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-slate-900">Технические навыки</h2>
+                <div class="w-16 h-1 bg-accent mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Группа 1: BI & Excel -->
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-all border-t-4 border-yellow-500">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-yellow-500 mr-3"></i> BI & Excel
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">Power BI</span>
+                        <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">Power Query</span>
+                        <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">DAX</span>
+                        <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">VBA / Macros</span>
+                        <span class="px-3 py-1 bg-yellow-50 text-yellow-700 rounded-full text-sm font-medium">MS Excel (Pro)</span>
+                    </div>
+                </div>
+
+                <!-- Группа 2: Programming & DB -->
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-all border-t-4 border-blue-500">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-code text-blue-500 mr-3"></i> Code & SQL
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">Python</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">Pandas</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">SQL</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">PostgreSQL</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">Oracle PL/SQL</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">MySQL</span>
+                        <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">Django</span>
+                    </div>
+                </div>
+
+                <!-- Группа 3: Tools & Other -->
+                <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-all border-t-4 border-indigo-500">
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-tools text-indigo-500 mr-3"></i> Инструменты
+                    </h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">Git</span>
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">Docker</span>
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">1C: УПП 8.3</span>
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">ABC Analysis</span>
+                        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm font-medium">Финансовое моделирование</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Секция Образование и Языки -->
+        <section id="education" class="grid grid-cols-1 lg:grid-cols-2 gap-8 fade-in-section">
             
-            // --- DESKTOP VIEW (GRID) ---
-            } else {
-                document.getElementById('header-actions').innerHTML = `<button class="btn btn-primary" onclick="Views.table.startAddDesktop()">➕ ${T('NEW')}</button>`;
-                document.getElementById('fab-add').style.display = 'none';
+            <!-- Образование -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-100">
+                <h3 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                    <i class="fas fa-graduation-cap text-accent mr-3"></i> Образование
+                </h3>
+                <div class="space-y-6">
+                    <div>
+                        <h4 class="font-bold text-lg">Бухгалтерский учет, анализ и аудит</h4>
+                        <p class="text-slate-500">БФЭТ (Бишкекский Финансово-Экономический Техникум)</p>
+                        <p class="text-sm text-slate-400">2020</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Python Developer / SQL</h4>
+                        <p class="text-slate-500">Megacom IT School</p>
+                        <p class="text-sm text-slate-400">2021, 2023 (Курсы повышения)</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg">Управленческий учет</h4>
+                        <p class="text-slate-500">CIPAEN</p>
+                        <p class="text-sm text-slate-400">2021</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Языки и Хобби -->
+            <div class="bg-primary text-white p-8 rounded-xl shadow-lg relative overflow-hidden">
+                <!-- Декор -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full opacity-10 blur-2xl transform translate-x-10 -translate-y-10"></div>
                 
-                let html = `<div class="desktop-table-wrap"><table><thead><tr>`;
-                visibleCols.forEach(m => html += `<th>${m.field_name}</th>`);
-                html += `<th style="width:100px"></th></tr></thead><tbody>`;
+                <h3 class="text-2xl font-bold mb-6 flex items-center relative z-10">
+                    <i class="fas fa-globe mr-3"></i> Языки
+                </h3>
+                <div class="space-y-4 mb-8 relative z-10">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span>Кыргызский</span>
+                        <span class="text-blue-300 font-medium">Родной</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span>Русский</span>
+                        <span class="text-green-400 font-medium">C1 - Продвинутый</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-2">
+                        <span>Английский</span>
+                        <span class="text-yellow-400 font-medium">A2 - Элементарный</span>
+                    </div>
+                </div>
 
-                // Add Row (Desktop Inline)
-                if(State.isAdding) html += Views.table.renderRowInput(visibleCols, {}, 'new');
+                <h3 class="text-2xl font-bold mb-4 flex items-center relative z-10">
+                    <i class="fas fa-heart mr-3"></i> Интересы
+                </h3>
+                <div class="flex flex-wrap gap-3 relative z-10">
+                    <span class="bg-slate-700 px-3 py-1 rounded-full text-sm">Плавание</span>
+                    <span class="bg-slate-700 px-3 py-1 rounded-full text-sm">Баскетбол</span>
+                    <span class="bg-slate-700 px-3 py-1 rounded-full text-sm">IT Технологии</span>
+                    <span class="bg-slate-700 px-3 py-1 rounded-full text-sm">Философия</span>
+                </div>
+            </div>
+        </section>
 
-                data.forEach(row => {
-                    if(State.editingId === row.id) html += Views.table.renderRowInput(visibleCols, row, row.id);
-                    else html += Views.table.renderRowDisplay(visibleCols, row, name);
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-20">
+        <div class="max-w-5xl mx-auto px-4 py-8 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
+            <div class="mb-4 md:mb-0">
+                <p class="text-slate-500 text-sm">© 2026 Омуралиев Кутман. Все права защищены.</p>
+            </div>
+            <div class="flex space-x-6">
+                <a href="https://t.me/kutya_omuraliev" class="text-slate-400 hover:text-accent transition-colors text-xl">
+                    <i class="fab fa-telegram"></i>
+                </a>
+                <a href="mailto:kutmanomuraliev012@gmail.com" class="text-slate-400 hover:text-accent transition-colors text-xl">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for animations -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Run only once
+                    }
                 });
-                html += `</tbody></table></div>`;
-                cont.innerHTML = html;
-            }
-        },
+            }, observerOptions);
 
-        // --- DESKTOP RENDERERS ---
-        renderRowDisplay(cols, row, tableName) {
-            let html = `<tr>`;
-            cols.forEach(m => {
-                let val = row[m.field_name];
-                if(m.data_type === 'FK' && m.ref_table) {
-                    const tr = State.db[m.ref_table]?.data.find(r=>String(r.id)===String(val));
-                    if(tr) {
-                        const tm = State.db._Metadata.data.filter(x=>x.table_name===m.ref_table);
-                        val = `<span class="tag tag-blue">${tr[tm.find(x=>x.is_label)?.field_name||'name'] || val}</span>`;
-                    }
-                }
-                html += `<td>${val === undefined ? '' : val}</td>`;
+            const sections = document.querySelectorAll('.fade-in-section');
+            sections.forEach(section => {
+                observer.observe(section);
             });
-            html += `<td style="text-align:right">
-                <button class="btn" style="padding:2px 6px" onclick="Views.table.startEditDesktop('${row.id}')">✏️</button>
-                <button class="btn" style="padding:2px 6px;color:red" onclick="Views.table.del('${tableName}', '${row.id}')">🗑️</button>
-            </td></tr>`;
-            return html;
-        },
-        renderRowInput(cols, rowData, rowId) {
-            let html = `<tr style="background:#f8fafc; border-left:3px solid var(--primary)">`;
-            cols.forEach(m => {
-                let val = rowData[m.field_name] || '';
-                let input = '';
-                if(m.data_type === 'PK') input = `<input class="inline-inp" value="${val}" disabled style="background:#e2e8f0;">`;
-                else if(m.data_type === 'FK') {
-                    let opts = `<option value="">-</option>`;
-                    if(m.ref_table && State.db[m.ref_table]) {
-                        State.db[m.ref_table].data.forEach(r => {
-                            const tm = State.db._Metadata.data.filter(x=>x.table_name===m.ref_table);
-                            const lbl = r[tm.find(x=>x.is_label)?.field_name||'name'] || r.id;
-                            opts += `<option value="${r.id}" ${String(r.id)===String(val)?'selected':''}>${lbl}</option>`;
-                        });
-                    }
-                    input = `<select id="inp_${m.field_name}" class="inline-inp">${opts}</select>`;
-                } else if (m.data_type === 'DATE') {
-                    input = `<input type="date" id="inp_${m.field_name}" class="inline-inp" value="${val ? new Date(val).toISOString().split('T')[0] : ''}">`;
-                } else input = `<input id="inp_${m.field_name}" class="inline-inp" value="${val}">`;
-                html += `<td>${input}</td>`;
-            });
-            html += `<td style="text-align:right"><button class="btn btn-primary" style="padding:4px" onclick="Views.table.save('${rowId}')">OK</button> <button class="btn" style="padding:4px" onclick="Views.table.cancel()">X</button></td></tr>`;
-            return html;
-        },
-
-        // --- ACTIONS ---
-        startAddDesktop() { State.isAdding = true; State.editingId = null; Views.table.render(State.activeTable); },
-        startEditDesktop(id) { State.editingId = id; State.isAdding = false; Views.table.render(State.activeTable); },
-        cancel() { State.isAdding = false; State.editingId = null; Views.table.render(State.activeTable); },
-        
-        // Mobile Actions (Modal based)
-        startAddMobile() {
-            UI.Modal.open(T('NEW'), box => UI.Form.render(box, State.activeTable), () => Views.table.save('new'));
-        },
-        editModal(table, row) {
-            UI.Modal.open(T('EDIT'), box => UI.Form.render(box, table, row), () => Views.table.save(row.id));
-        },
-
-        async save(rowId) {
-            const table = State.activeTable;
-            const data = UI.Form.collect(table); // Universal collector works for both inline and modal if IDs match
-            if(rowId !== 'new') { data.id = rowId; data.is_edit = true; }
-            
-            UI.Loader(true);
-            await fetch(`${API_URL}?action=save_row`, {method:'POST', body:JSON.stringify({table, data})});
-            await State.refresh();
-            State.isAdding = false; State.editingId = null;
-            Views.table.render(table);
-            UI.Loader(false);
-        },
-        async del(n, id) {
-            if(!confirm(T('CONFIRM'))) return;
-            UI.Loader(true);
-            await fetch(`${API_URL}?action=delete&table=${n}&id=${id}`);
-            await State.refresh();
-            Views.table.render(n);
-            UI.Loader(false);
-        }
-    },
-
-    metadata: {
-        render() {
-            document.getElementById('page-title').innerText = T('STRUCTURE');
-            document.getElementById('header-actions').innerHTML = '';
-            document.getElementById('fab-add').style.display = 'none';
-            document.getElementById('app-content').innerHTML = `
-                <div style="padding:10px; text-align:center">Metadata Editor is Desktop Optimized.<br>Please use a larger screen to edit structure.</div>
-            `;
-            if(!IS_MOBILE) {
-                // Desktop Metadata Editor (Simplified for brevity, full logic in prev versions)
-                document.getElementById('app-content').innerHTML = `<div style="padding:20px">Use "Sync" to auto-detect fields.<br><button class="btn" onclick="fetch('${API_URL}?action=sync_meta').then(()=>location.reload())">🔄 Sync Structure</button></div>`;
-            }
-        }
-    },
-
-    settings: {
-        render() {
-            document.getElementById('page-title').innerText = T('SETTINGS');
-            document.getElementById('header-actions').innerHTML = '';
-            document.getElementById('fab-add').style.display = 'none';
-            document.getElementById('app-content').innerHTML = `
-                <div style="padding:20px; max-width:500px; background:white; border-radius:8px">
-                     <label style="font-weight:600;display:block;margin-bottom:5px">${T('LBL_URL')}</label>
-                     <input id="url" value="${API_URL||''}" style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ddd;border-radius:6px">
-                     <label style="font-weight:600;display:block;margin-bottom:5px">${T('LBL_LANG')}</label>
-                     <select id="lang" style="width:100%;padding:10px;margin-bottom:15px;border:1px solid #ddd;border-radius:6px">
-                        <option value="ru" ${CURRENT_LANG==='ru'?'selected':''}>Русский</option>
-                        <option value="en" ${CURRENT_LANG==='en'?'selected':''}>English</option>
-                     </select>
-                     <button class="btn btn-primary" onclick="localStorage.setItem('cfs_url', document.getElementById('url').value);localStorage.setItem('cfs_lang', document.getElementById('lang').value);location.reload()">${T('SAVE')}</button>
-                </div>`;
-        }
-    }
-};
-
-const App = { 
-    init() { 
-        UI.translate(); 
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        
-        if(API_URL) State.refresh().then(() => {
-            if(IS_MOBILE) App.route('home'); // Mobile Home
-            else { 
-                const keys = Object.keys(State.db).filter(k=>!k.startsWith('_'));
-                if(keys.length) App.route('table', keys[0]); else App.route('settings');
-            }
-        }); 
-        else App.route('settings'); 
-    }, 
-    route(v,p) { 
-        State.isAdding=false; State.editingId=null;
-        
-        // Desktop Nav Update
-        document.querySelectorAll('.sidebar .nav-item').forEach(e=>e.classList.remove('active'));
-        
-        // Mobile Nav Update
-        document.querySelectorAll('.bottom-nav .nav-btn').forEach(e=>e.classList.remove('active'));
-
-        if(v==='table') { 
-            Views.table.render(p); 
-            // Highlight table in sidebar
-        } else if(v==='home') {
-             UI.renderNav(); // Renders list
-             document.querySelector('.bottom-nav .nav-btn:nth-child(1)').classList.add('active');
-        } else if(v==='metadata') { 
-            Views.metadata.render(); 
-            document.querySelector('[onclick*="metadata"]').classList.add('active'); // Sidebar
-            if(IS_MOBILE) document.querySelector('.bottom-nav .nav-btn:nth-child(2)').classList.add('active');
-        } else { 
-            Views.settings.render(); 
-            document.querySelector('[onclick*="settings"]').classList.add('active'); // Sidebar
-            if(IS_MOBILE) document.querySelector('.bottom-nav .nav-btn:nth-child(3)').classList.add('active');
-        }
-    } 
-};
-window.onload = App.init;
-</script>
+        });
+    </script>
 </body>
 </html>
